@@ -1,0 +1,59 @@
+* {
+    padding: 1%;
+}
+
+.menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+
+}
+
+#cartaoUsuario {
+    margin: 0 auto;
+}
+
+.menu>div {
+    margin: 1%;
+}
+
+html {
+    min-height: 100%;
+}
+
+body {
+    background-repeat: no-repeat;
+    background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+}
+
+
+#ICONE_IMAGEM {
+    font-size: 500%;
+    text-align: center;
+    color: #10a76a;
+}
+
+.card {
+    align-items: center;
+}
+
+a.btn-primary {
+    background-color: rgb(35, 45, 182);
+}
+
+#paginaBusca{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.mapcontainer{
+    background-color: white;
+    border-radius: 2%;;
+
+}
+
+.logoMapa{
+    width: 20%;
+    margin-left: 40%;
+}
