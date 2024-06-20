@@ -1,34 +1,45 @@
+const express = require('express');
 const sql = require('mssql');
+const cors = require('cors');
+require('dotenv').config();
 
-// Configuração da conexão
-const config = {
-    user: 'seuUsuario',
-    password: 'suaSenha',
-    server: 'seuServidor', 
-    database: 'seuBancoDeDados',
+const app = express();
+const port = 3000;
+
+app.use(cors());
+
+// Configuração do banco de dados
+const dbConfig = {
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    server: process.env.DB_SERVER,
+    database: process.env.DB_DATABASE,
     options: {
-        encrypt: true, // Use este parâmetro se você estiver conectando a um Azure SQL
+        encrypt: true, // Use isso se estiver conectando ao Azure SQL
         trustServerCertificate: true // Defina como true se estiver usando um SQL Server local
     }
 };
 
-// Função assíncrona para conectar e consultar o banco de dados
-async function connectToDatabase() {
-    try {
-        // Conectando ao banco de dados
-        await sql.connect(config);
-        console.log('Conectado ao banco de dados com sucesso!');
-
-        // Realizando uma consulta
-        const result = await sql.query`SELECT * FROM suaTabela`;
-        console.log(result);
-
-        // Fechar a conexão
-        await sql.close();
-    } catch (err) {
+// Conectar ao banco de dados
+sql.connect(dbConfig, err => {
+    if (err) {
         console.error('Erro ao conectar ao banco de dados:', err);
+        return;
     }
-}
+    console.log('Conectado ao banco de dados');
+});
 
-// Chame a função para conectar ao banco de dados
-connectToDatabase();
+// Rota para obter os dados do usuário
+app.get('/api/usuario', async (req, res) => {
+    try {
+        const result = await sql.query`SELECT * FROM Usuarios WHERE id = 1`; // Altere conforme necessário
+        const vacinas = await sql.query`SELECT * FROM Vacinas WHERE usuario_id = 1`; // Altere conforme necessário
+        res.json({ usuario: result.recordset[0], vacinas: vacinas.recordset });
+    } catch (err) {
+        res.status(500).send({ error: 'Erro ao buscar dados do usuário' });
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Servidor rodando em http://localhost:${port}`);
+});

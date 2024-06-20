@@ -49,26 +49,42 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-              </tr>
+              <!-- Os dados serão adicionados aqui pelo script -->
             </tbody>
         </table>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: 'http://localhost:3000/api/usuario', // Aponte para sua API
+                method: 'GET',
+                success: function(data) {
+                    // Atualiza os dados do usuário
+                    $('#NOMEUSUARIO').text(data.usuario.nome);
+                    
+                    // Limpa a tabela antes de adicionar novos dados
+                    const tbody = $('table tbody');
+                    tbody.empty();
+
+                    // Adiciona as vacinas à tabela
+                    data.vacinas.forEach((vacina, index) => {
+                        tbody.append(`
+                            <tr>
+                                <th scope="row">${index + 1}</th>
+                                <td>${vacina.nome}</td>
+                                <td>${vacina.data}</td>
+                                <td>${vacina.data_proxima}</td>
+                            </tr>
+                        `);
+                    });
+                },
+                error: function(err) {
+                    console.error('Erro ao buscar dados do usuário:', err);
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
